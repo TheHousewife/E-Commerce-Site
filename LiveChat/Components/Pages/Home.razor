@@ -1,43 +1,71 @@
 ﻿@page "/"
+@using LiveChat.Data
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext Context
 
 <PageTitle>Home</PageTitle>
 
-<div class="container-fluid bg-light py-5">
+<div class="container-fluid bg-light py-5 shadow-sm">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6">
                 <h1 class="display-4 fw-bold">Welcome to Our Store</h1>
                 <p class="lead">Discover amazing products at great prices</p>
-                <a href="/shop" class="btn btn-primary btn-lg">Shop Now</a>
+                <a href="Store" class="btn btn-primary btn-lg">Shop Now</a>
             </div>
             <div class="col-md-6">
-                <img src="https://via.placeholder.com/600x400" class="img-fluid rounded" alt="Store welcome image">
+                <img src="images/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-free-vector.jpg" class="img-fluid rounded" alt="Store welcome image">
             </div>
         </div>
     </div>
 </div>
 
 
-<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+<div id="heroCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="images/bigsale.jpg" class="d-block w-100" alt="Big Sale">
+            <img src="images/big-sale.jpg" class="d-block w-100" alt="Big Sale">
         </div>
         <div class="carousel-item">
-            <img src="images/newarrival.jpg" class="d-block w-100" alt="New Arrivals">
+            <img src="images/new-arrival.jpg" class="d-block w-100" alt="New Arrivals">
         </div>
         <div class="carousel-item">
-            <img src="images/freeshipping.jpg" class="d-block w-100" alt="Free Shipping">
+            <img src="images/free-shipping.jpg" class="d-block w-100" alt="Free Shipping">
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <div class="carousel-arrow-div">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </div>
+        
         <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <div class="carousel-arrow-div">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </div>
         <span class="visually-hidden">Next</span>
     </button>
+</div>
+
+<div class="container py-4 bg-light shadow-sm rounded">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <i class="bi bi-truck fs-1 text-primary"></i>
+            <h5 class="mt-2">Free Shipping</h5>
+            <p>Enjoy fast and free shipping on all orders.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-shield-check fs-1 text-success"></i>
+            <h5 class="mt-2">Secure Purchases</h5>
+            <p>Your payment is safe with our encrypted checkout.</p>
+        </div>
+        <div class="col-md-4">
+            <i class="bi bi-award fs-1 text-warning"></i>
+            <h5 class="mt-2">Quality Guarantee</h5>
+            <p>We stand by our products with a 100% quality assurance.</p>
+        </div>
+    </div>
 </div>
 
 
@@ -45,8 +73,8 @@
     <h2 class="text-center mb-4">Shop by Category</h2>
     <div class="row g-4">
         <div class="col-md-4">
-            <div class="card h-100">
-                <img src="images/Electronics.png" class="card-img-top category-icon" alt="Category 1">
+            <div class="card h-100 shadow-sm">
+                <img src="images/electronics.jpeg" class="card-img-top" alt="Electronics">
                 <div class="card-body text-center">
                     <h5 class="card-title">Electronics</h5>
                     <a href="#" class="btn btn-outline-primary">View Products</a>
@@ -54,8 +82,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100">
-                <img src="images/Electronics.png" class="card-img-top category-icon" alt="Category 2">
+            <div class="card h-100 shadow-sm">
+                <img src="images/clothing.jpg" class="card-img-top" alt="Clothing">
                 <div class="card-body text-center">
                     <h5 class="card-title">Clothing</h5>
                     <a href="#" class="btn btn-outline-primary">View Products</a>
@@ -63,8 +91,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100">
-                <img src="images/Electronics.png" class="card-img-top category-icon" alt="Category 3">
+            <div class="card h-100 shadow-sm">
+                <img src="images/accessories.jpg" class="card-img-top" alt="Accessories">
                 <div class="card-body text-center">
                     <h5 class="card-title">Accessories</h5>
                     <a href="#" class="btn btn-outline-primary">View Products</a>
@@ -76,16 +104,16 @@
 
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Featured Products</h2>
+    <h2 class="text-center mb-4">Featured products</h2>
     <div class="row g-4">
-        @for (int i = 1; i <= 4; i++)
+        @foreach (var product in products.Take(4))
         {
             <div class="col-md-3">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Product @i">
+                <div class="card h-100 shadow-sm">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
                     <div class="card-body">
-                        <h5 class="card-title">Product @i</h5>
-                        <p class="card-text">$99.99</p>
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Price.ToString("C")</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <button class="btn btn-primary">Add to Cart</button>
                             <button class="btn btn-outline-secondary btn-sm">
@@ -126,3 +154,16 @@
         </div>
     </div>
 </div>
+
+
+@code{
+
+    private List<Product> products = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Context.Products.ToListAsync();
+    }
+    
+
+}
