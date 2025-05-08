@@ -1,5 +1,6 @@
 @page "/product/{id:int}"
 @using LiveChat.Data
+@using Microsoft.EntityFrameworkCore
 @inject ApplicationDbContext Context
 
 
@@ -28,9 +29,12 @@
     [Parameter] public int Id { get; set; }
     private Product _product;
     
+    private List<Product> _products = new();
+    
     protected override async Task OnInitializedAsync()
     {
         _product = await Context.Products.FindAsync(Id);
+        _products = await Context.Products.ToListAsync();
     }
     
 }
@@ -49,6 +53,28 @@
                 <button class="btn btn-primary mt-3">Add to Cart</button>
                 <a href="Store" class="btn btn-secondary mt-3">Return to Store</a>
             </div>
+        </div>
+    </div>
+    
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured products</h2>
+        <div class="row g-4">
+            @foreach (var product in _products.Take(4))
+            {
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Price.ToString("C")</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/product/@product.Id" class="btn btn-outline-primary">View Details</a>
+                                <button class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 }
