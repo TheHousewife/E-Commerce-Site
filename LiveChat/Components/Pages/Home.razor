@@ -106,7 +106,7 @@
 <div class="container my-5">
     <h2 class="text-center mb-4">Featured products</h2>
     <div class="row g-4">
-        @foreach (var product in products.Take(4))
+        @foreach (var product in _products.Take(4))
         {
             <div class="col-md-3">
                 <div class="card h-100 shadow-sm">
@@ -135,7 +135,7 @@
                 <h3 class="mb-0">Special Offer! Get 20% off on your first purchase</h3>
             </div>
             <div class="col-md-4 text-md-end">
-                <button class="btn btn-light">Shop Now</button>
+                <a href="Store" class="btn btn-outline-primary btn-lg">Shop Now</a>
             </div>
         </div>
     </div>
@@ -158,11 +158,11 @@
 
 @code{
 
-    private List<Product> products = new();
+    private List<Product> _products = new();
 
     protected override async Task OnInitializedAsync()
     {
-        products = await Context.Products.ToListAsync();
+        _products = await Context.Products.ToListAsync();
     }
     
 

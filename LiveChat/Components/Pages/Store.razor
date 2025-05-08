@@ -2,18 +2,32 @@
 @using LiveChat.Data
 @using Microsoft.EntityFrameworkCore
 @inject ApplicationDbContext Context
-<h3>Store</h3>
+
+<div class="container-fluid bg-light py-5 shadow-sm">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Check out our latest products</h1>
+                <p class="lead">We have new sales every week!</p>
+            </div>
+            <div class="col-md-6">
+                <img src="images/summer-sale.jpg" class="img-fluid rounded" alt="Summer sale image">
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container my-5">
     <h2 class="text-center mb-4">Browse our selection</h2>
     <div class="row g-4">
-        @foreach (var product in products)
+        @foreach (var product in _products)
         {
             <div class="col-md-3">
                 <div class="card h-100 shadow-sm">
                     <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
                         <p class="card-text">@product.Price.ToString("C")</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <button class="btn btn-primary">Add to Cart</button>
@@ -29,10 +43,10 @@
 </div>
 
 @code {
-    private List<Product> products = new();
+    private List<Product> _products = new();
 
     protected override async Task OnInitializedAsync()
     {
-        products = await Context.Products.ToListAsync();
+        _products = await Context.Products.ToListAsync();
     }
 }
