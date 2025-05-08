@@ -2,31 +2,59 @@
 @using LiveChat.Data
 @inject ApplicationDbContext Context
 
-<a href="Store" class="btn btn-secondary">Return to Store</a>
+
+<style>
+    .container {
+        max-width: 800px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .img-fluid {
+        border-radius: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+</style>
 
 @code {
 
     
     [Parameter] public int Id { get; set; }
     private Product _product;
-
+    
     protected override async Task OnInitializedAsync()
     {
         _product = await Context.Products.FindAsync(Id);
     }
+    
 }
 
 @if (_product != null)
 {
-    <div class="container">
-        <h1>@_product.Name</h1>
-        <img src="@_product.ImageUrl" alt="@_product.Name" class="img-fluid"/>
-        <p>@_product.Description</p>
-        <p>Price: @_product.Price.ToString("C")</p>
-        <button class="btn btn-primary">Add to Cart</button>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="@_product.ImageUrl" alt="@_product.Name" class="img-fluid rounded shadow"/>
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-4">@_product.Name</h1>
+                <p class="text-muted">@_product.Description</p>
+                <p class="font-weight-bold text-success">Price: @_product.Price.ToString("C")</p>
+                <button class="btn btn-primary mt-3">Add to Cart</button>
+                <a href="Store" class="btn btn-secondary mt-3">Return to Store</a>
+            </div>
+        </div>
     </div>
 }
 else
 {
-    <p>Product not found.</p>
+    <div class="alert alert-danger mt-4">
+        <strong>Oops!</strong> This product is not available.
+    </div>
 }
