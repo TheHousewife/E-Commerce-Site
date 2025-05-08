@@ -1,0 +1,32 @@
+@page "/product/{id:int}"
+@using LiveChat.Data
+@inject ApplicationDbContext Context
+
+<a href="Store" class="btn btn-secondary">Return to Store</a>
+
+@code {
+
+    
+    [Parameter] public int Id { get; set; }
+    private Product _product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _product = await Context.Products.FindAsync(Id);
+    }
+}
+
+@if (_product != null)
+{
+    <div class="container">
+        <h1>@_product.Name</h1>
+        <img src="@_product.ImageUrl" alt="@_product.Name" class="img-fluid"/>
+        <p>@_product.Description</p>
+        <p>Price: @_product.Price.ToString("C")</p>
+        <button class="btn btn-primary">Add to Cart</button>
+    </div>
+}
+else
+{
+    <p>Product not found.</p>
+}
