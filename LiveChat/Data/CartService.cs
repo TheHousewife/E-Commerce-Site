@@ -13,10 +13,20 @@ public class CartService
 
     public async Task<Cart> GetCartAsync(string userId)
     {
-        return await _context.Carts
+        var cart = await _context.Carts
             .Include(c => c.Items)
-            .FirstOrDefaultAsync(c => c.UserId == userId) ?? new Cart { UserId = userId };
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+
+        if (cart == null)
+        {
+            cart = new Cart { UserId = userId };
+            _context.Carts.Add(cart);
+            await _context.SaveChangesAsync();
+        }
+
+        return cart;
     }
+
 
     public async Task AddToCartAsync(string userId, Product product)
     {
@@ -26,6 +36,7 @@ public class CartService
         if (existingItem != null)
         {
             existingItem.Quantity++;
+            await _context.SaveChangesAsync();
         }
         else
         {
