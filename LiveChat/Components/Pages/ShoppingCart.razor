@@ -1,0 +1,65 @@
+@page "/Cart"
+@using LiveChat.Data
+@using LiveChat.Components.Pages
+@using CartModel = LiveChat.Data.Cart
+@inject CartService CartService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h2>Your Shopping Cart</h2>
+
+@if (_shoppingCart == null || _shoppingCart.Items.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in _shoppingCart.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Price * item.Quantity)</td>
+                <td>
+                    <button @onclick="() => RemoveFromCart(item.ProductId)">Remove</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <p><strong>Total Price:</strong> @_shoppingCart.TotalPrice</p>
+}
+
+@code {
+    private CartModel _shoppingCart;
+    private string userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            userId = user.Identity.Name;
+            _shoppingCart = await CartService.GetCartAsync(userId);
+        }
+    }
+
+    private async Task RemoveFromCart(int productId)
+    {
+        await CartService.RemoveFromCartAsync(userId, productId);
+        _shoppingCart = await CartService.GetCartAsync(userId);
+    }
+}
