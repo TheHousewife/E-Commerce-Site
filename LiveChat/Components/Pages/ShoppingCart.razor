@@ -47,39 +47,49 @@
     }
 </div>
 
-<div class="container">
-    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#paymentModal">
-        Proceed to Payment
-    </button>
+
+@if (_shoppingCart == null || _shoppingCart.Items.Count == 0)
+{
+    <a href="Store" class="btn btn-secondary mt-3">Return to Store</a>                     
+}
+else
+{
+    <div class="container">
+        <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#paymentModal">
+            Proceed to Payment
+        </button>
     
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="paymentModalLabel">Choose Payment Method</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="paymentMethod" class="form-label">Select Payment Method</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option value="credit">Credit Card</option>
-                                <option value="paypal">PayPal</option>
-                                <option value="bank">Bank Transfer</option>
-                            </select>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">
-                                Confirm Purchase
-                            </button>
-                        </div>
-                    </form>
+        <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalLabel">Choose Payment Method</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Select Payment Method</label>
+                                <select class="form-select" id="paymentMethod">
+                                    <option value="credit">Credit Card</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="bank">Bank Transfer</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                                    Confirm Purchase
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>              
+}
+
+
 
 @code {
     private CartModel _shoppingCart;
