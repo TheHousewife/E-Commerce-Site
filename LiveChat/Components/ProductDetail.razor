@@ -3,8 +3,79 @@
 @using Microsoft.EntityFrameworkCore
 @inject ApplicationDbContext Context
 @inject NavigationManager NavManager
+@inject CartService CartService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-
+@if (_product != null)
+{
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 img-container">
+                <img src="@_product.ImageUrl" alt="@_product.Name" class="img-fluid rounded shadow-sm h-100 w-100"/>
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-4">@_product.Name</h1>
+                <p class="text-muted">@_product.Description</p>
+                <p class="font-weight-bold text-success">Price: @_product.Price.ToString("C")</p>
+                <div class="d-flex flex-row justify-content-center gap-3">
+                    @if (isUserLoggedIn)
+                    {
+                        <button class="btn btn-primary" @onclick="() => AddToCart(_product)">Add to Cart</button>
+                    }
+                    else
+                    {
+                        <a href="Account/Login" class="btn btn-secondary">Login to Add</a>
+                    }
+                    <a href="Store" class="btn btn-secondary">Return to Store</a>
+                </div>
+                </div>
+                
+        </div>
+    </div>
+    
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured products</h2>
+        <div class="row g-4">
+            @foreach (var product in _products.Take(4))
+            {
+                <div class="col-md-3">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Price.ToString("C")</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="/product/@product.Id" class="btn btn-outline-primary btn-sm">View Details</a>
+                                <div class="d-flex flex-row justify-content-center align-content-center ms-2">
+                                    @if (isUserLoggedIn)
+                                    {
+                                        <button class="btn btn-primary btn-sm" @onclick="() => AddToCart(product)">Add to Cart</button>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" 
+                                           @onclick="@(() => NavManager.NavigateTo($"/product/{product.Id}", forceLoad: true))">
+                                            View Details
+                                        </a>
+                                    }
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+    
+}
+else
+{
+    <div class="alert alert-danger mt-4">
+        <strong>Oops!</strong> This product is not available.
+    </div>
+}
 
 <style>
     .container {
@@ -37,63 +108,34 @@
     private Product _product;
     
     private List<Product> _products = new();
+    private bool isUserLoggedIn;
+    private string userId;
     
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         _product = await Context.Products.FindAsync(Id);
         _products = await Context.Products.ToListAsync();
     }
     
-}
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
 
-@if (_product != null)
-{
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-6 img-container">
-                <img src="@_product.ImageUrl" alt="@_product.Name" class="img-fluid rounded shadow-sm h-100 w-100"/>
-            </div>
-            <div class="col-md-6">
-                <h1 class="display-4">@_product.Name</h1>
-                <p class="text-muted">@_product.Description</p>
-                <p class="font-weight-bold text-success">Price: @_product.Price.ToString("C")</p>
-                <button class="btn btn-primary mt-3">Add to Cart</button>
-                <a href="Store" class="btn btn-secondary mt-3">Return to Store</a>
-            </div>
-        </div>
-    </div>
+        isUserLoggedIn = user.Identity.IsAuthenticated;
+        if (isUserLoggedIn)
+        {
+            userId = user.Identity.Name;
+        }
+    }
     
-    <div class="container my-5">
-        <h2 class="text-center mb-4">Featured products</h2>
-        <div class="row g-4">
-            @foreach (var product in _products.Take(4))
-            {
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm">
-                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
-                        <div class="card-body">
-                            <h5 class="card-title">@product.Name</h5>
-                            <p class="card-text">@product.Price.ToString("C")</p>
-                            <div class="d-flex justify-content-between align-items-center gap-1">
+    private async Task AddToCart(Product product)
+    {
+        if (!isUserLoggedIn) return;
 
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" 
-                                   @onclick="@(() => NavManager.NavigateTo($"/product/{product.Id}", forceLoad: true))">
-                                    View Details
-                                </a>
-
-
-                                <button class="btn btn-primary btn-sm">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-}
-else
-{
-    <div class="alert alert-danger mt-4">
-        <strong>Oops!</strong> This product is not available.
-    </div>
+        await CartService.AddToCartAsync(userId, product);
+    }
+    
+    
+    
 }
