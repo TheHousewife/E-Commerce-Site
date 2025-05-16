@@ -1,5 +1,72 @@
 @page "/Contact"
-<h3>Contact</h3>
+
+<div class="jumbotron-fluid text-center py-5">
+    <h1 class="display-4 ">Contact Us</h1>
+    <p class="lead">Choose how you wish to reach out to us, we always try to answer as soon as we can!</p>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center my-5">
+    <div class="row w-100 justify-content-around">
+        
+        <div class="card shadow-lg rounded-3 p-4 col-md-4 text-center">
+            <h3>Call Us</h3>
+            <div class="my-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/8644/8644324.png" alt="Phone icon" class="w-25">
+            </div>
+            <p class="fw-bold fs-5">070-123-1234</p>
+            
+            <hr class="my-4">
+            <h3>Visit Us</h3>
+            <iframe 
+                class="w-100 rounded-3"
+                height="250"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2126.810964229372!2d14.260738277470494!3d57.78758617390477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465a6d2509521383%3A0x114f56423041bf57!2sTUC%20Sweden!5e0!3m2!1ssv!2sse!4v1747399279326!5m2!1ssv!2sse"
+                allowfullscreen>
+            </iframe>
+            <p class="fw-bold mt-3">Opening Hours:</p>
+            <ul class="list-unstyled">
+                <li>Mon - Fri: 09:00 - 18:00</li>
+                <li>Sat - Sun: 10:00 - 16:00</li>
+            </ul>
+        </div>
+
+        <div class="card shadow-lg rounded-3 p-4 col-md-6">
+            <h3 class="text-center">Email Us</h3>
+            <form>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control form-control-lg mt-2" id="email" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control form-control-lg mt-2" id="firstName" placeholder="Enter your first name">
+                </div>
+                
+                <div class="form-group mt-3">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control form-control-lg mt-2" id="lastName" placeholder="Enter your last name">
+                </div>
+                
+                
+                <div class="form-group mt-3">
+                    <label for="helpType">Help Type</label>
+                    <select class="form-select form-select-lg mt-2" id="helpType">
+                        <option selected>Please tell us how we can assist you</option>
+                        <option value="Payment">Payment</option>
+                        <option value="Delivery">Delivery</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="message">Message</label>
+                    <textarea class="form-control form-control-lg mt-2" id="message" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg mt-4 w-100">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 @code {
     
