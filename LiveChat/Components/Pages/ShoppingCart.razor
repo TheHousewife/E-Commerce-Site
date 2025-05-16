@@ -81,12 +81,13 @@ else
                             </div>
                             <div class="mb-3">
                                 <label for="paymentMethod" class="form-label">Select Coupon</label>
-                                <select class="form-select mt-3" id="paymentMethod">
+                                <select class="form-select mt-3" id="couponSelection" @onchange="ApplyCoupon">
                                     <option value="none">None</option>
                                     <option value="firstPurchase">First Purchase (20% off)</option>
                                 </select>
                             </div>
                             <div class="text-center">
+                                <p class="font-weight-bold h5 mt-3">Total Price: @GetTotalPrice().ToString("C")</p>
                                 <button type="button" class="btn btn-success mt-3" data-bs-dismiss="modal">
                                     Confirm Purchase
                                 </button>
@@ -104,6 +105,7 @@ else
 @code {
     private CartModel _shoppingCart;
     private string userId;
+    private bool couponApplied = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -121,5 +123,31 @@ else
     {
         await CartService.RemoveFromCartAsync(userId, productId);
         _shoppingCart = await CartService.GetCartAsync(userId);
+    }
+    
+    private void ApplyCoupon(ChangeEventArgs e)
+    {
+        var selectedCoupon = e.Value?.ToString();
+
+        if (selectedCoupon == "firstPurchase")
+        {
+            couponApplied = true;
+        }
+        else
+        {
+            couponApplied = false;
+        }
+    }
+
+    private decimal GetTotalPrice()
+    {
+        var total = _shoppingCart?.TotalPrice ?? 0;
+
+        if (couponApplied)
+        {
+            total *= 0.8M;
+        }
+
+        return total;
     }
 }
