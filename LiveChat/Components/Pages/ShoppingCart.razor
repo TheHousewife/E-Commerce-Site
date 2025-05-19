@@ -121,7 +121,7 @@ else
     {
         isLoading = true;
         
-        await Task.Delay(1001);
+        await Task.Delay(1000);
         
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
