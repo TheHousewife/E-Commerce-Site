@@ -19,8 +19,18 @@
     </div>
 </div>
 
+
+
 <div class="container my-5">
     <h2 class="text-center mb-4">Browse our selection</h2>
+    <div class="text-center mb-3">
+        <select @onchange="SelectedCategoryChanged" class="form-select w-auto mx-auto">
+            <option value="All">Show All</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+        </select>
+    </div>
     <div class="row g-4">
         @foreach (var product in _products)
         {
@@ -52,25 +62,41 @@
     private List<Product> _products = new();
     private bool isUserLoggedIn;
     private string userId;
+    private string selectedCategory = "All";
 
     protected override async Task OnInitializedAsync()
     {
-        _products = await Context.Products.ToListAsync();
-        
+        var allProducts = await Context.Products.ToListAsync();
+        UpdateProductList(allProducts);
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        
+
         isUserLoggedIn = user.Identity.IsAuthenticated;
         if (isUserLoggedIn)
         {
             userId = user.Identity.Name;
         }
     }
-    
+
+    private void UpdateProductList(List<Product> allProducts)
+    {
+        _products = selectedCategory == "All" 
+            ? allProducts 
+            : allProducts.Where(p => p.ProductType == selectedCategory).ToList();
+    }
+
+    private async Task SelectedCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? "All";
+        var allProducts = await Context.Products.ToListAsync();
+        UpdateProductList(allProducts);
+        StateHasChanged();
+    }
+
     private async Task AddToCart(Product product)
     {
         if (!isUserLoggedIn) return;
-
         await CartService.AddToCartAsync(userId, product);
     }
 }
