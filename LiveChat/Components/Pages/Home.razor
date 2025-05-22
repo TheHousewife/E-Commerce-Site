@@ -4,6 +4,7 @@
 @inject CartService CartService
 @inject ApplicationDbContext Context
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 
@@ -48,6 +49,17 @@
         </div>
         <span class="visually-hidden">Next</span>
     </button>
+</div>
+
+<div class="toast-container position-fixed start-50 top-0 py-5">
+    <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Product added to cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
 </div>
 
 <div class="container py-4 bg-light shadow-sm rounded">
@@ -142,7 +154,7 @@
                 <h3 class="mb-0"><i>Special Offer! Get 20% off on your first purchase</i></h3>
             </div>
             <div class="col-md-4 text-md-end">
-                <a href="Store" class="btn btn-outline-primary btn-lg">Shop Now</a>
+                <a href="Store" class="btn btn-primary btn-lg">Shop Now</a>
             </div>
         </div>
     </div>
@@ -187,5 +199,9 @@
         if (!isUserLoggedIn) return;
 
         await CartService.AddToCartAsync(userId, product);
+        
+        await JS.InvokeVoidAsync("showCartToast");
+
+        
     }
 }

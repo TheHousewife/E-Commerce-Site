@@ -4,6 +4,7 @@
 @inject ApplicationDbContext Context
 @inject CartService CartService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JS
 
 <div class="container-fluid bg-light py-5 shadow-sm">
     <div class="container">
@@ -15,6 +16,17 @@
             <div class="col-md-6">
                 <img src="images/summer-sale.jpg" class="img-fluid rounded" alt="Summer sale banner">
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed start-50 top-0 py-5">
+    <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Product added to cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
@@ -98,5 +110,7 @@
     {
         if (!isUserLoggedIn) return;
         await CartService.AddToCartAsync(userId, product);
+        
+        await JS.InvokeVoidAsync("showCartToast");
     }
 }
