@@ -12,14 +12,17 @@
 
 <PageTitle>Log in</PageTitle>
 
-<div class="row d-flex justify-content-center align-items-center">
+<h1 class="text-center">Log in to make use of our shop</h1>
+<hr class="w-50 mx-auto"/>
+
+
+
+<div class="container bg-light rounded border-0 shadow-sm py-3 row d-flex justify-content-evenly align-items-center mx-auto">
     <div class="col-lg-6">
-        <section>
+        <section class="w-75 mx-auto">
             <StatusMessage Message="@errorMessage" />
             <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
                 <DataAnnotationsValidator />
-                <h2>Use a local account to log in.</h2>
-                <hr />
                 <ValidationSummary class="text-danger" role="alert" />
                 <div class="form-floating mb-3">
                     <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -38,7 +41,7 @@
                     </label>
                 </div>
                 <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary mb-3">Log in</button>
                 </div>
                 <div>
                     <p>
@@ -52,6 +55,22 @@
                     </p>
                 </div>
             </EditForm>
+        </section>
+    </div>
+    
+    <div class="col-lg-6 justify-content-center align-items-center d-flex">
+        <section>
+            <img class="mt-2" src="https://www.shutterstock.com/image-vector/man-key-near-computer-account-260nw-1499141258.jpg" alt="login image"/>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h3>With an account you get:</h3>
+                <ul class="fs-5" style="list-style: circle;">
+                    <li>The ability to order products</li>
+                    <li>Make use of our first purchase coupon for 20% off</li>
+                    <li>We offer free shipping and free returns to our members</li>
+                    <li>Registering is free and easy</li>
+                    <li>lalala</li>
+                </ul>
+            </div>
         </section>
     </div>
 </div>
