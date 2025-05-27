@@ -17,33 +17,60 @@
 
 <PageTitle>Register</PageTitle>
 
-<div class="row d-flex justify-content-center align-items-center">
+
+<h1 class="text-center">Create an account to sign in</h1>
+<hr class="w-50 mx-auto"/>
+
+<div class="container bg-light rounded border-0 shadow-sm py-3 d-flex flex-row justify-content-evenly align-items-center mx-auto">
     <div class="col-lg-6">
-        <StatusMessage Message="@Message" />
-        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
-            <hr />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="Input.Email">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="Input.Password">Password</label>
-                <ValidationMessage For="() => Input.Password" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="Input.ConfirmPassword">Confirm Password</label>
-                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </EditForm>
+        <section class="mx-auto w-75">
+            <StatusMessage Message="@Message" />
+            <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+                <DataAnnotationsValidator />
+                <h2>Create a new account</h2>
+                <ValidationSummary class="text-danger" role="alert" />
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label for="Input.Email">Email</label>
+                    <ValidationMessage For="() => Input.Email" class="text-danger" />
+                </div>
+                <div class="form-floating mb-3">
+                    <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label for="Input.Password">Password</label>
+                    <ValidationMessage For="() => Input.Password" class="text-danger" />
+                </div>
+                <div class="form-floating mb-3">
+                    <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label for="Input.ConfirmPassword">Confirm Password</label>
+                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            </EditForm>
+        </section>
     </div>
+    
+    <div class="col-lg-6">
+        <section class="mx-auto w-75">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <img class="mt-2 w-75" src="https://st.depositphotos.com/18722762/51522/v/450/depositphotos_515228796-stock-illustration-online-registration-sign-login-account.jpg" alt="person logging in on a laptop"/>
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <h3 class="mt-2">Questions about account creation?</h3>
+                <ul class="fs-5 mt-2 bg-white p-3 rounded border" style="list-style: none; border-color: #c3c3c3">
+                    <li class="mt-1">Limited to one email per account</li>
+                    <li class="mt-1">We sell your information to the highest buyer</li>
+                    <li class="mt-1">If you try to use the 20% off coupon after already having used it we will bill you</li>
+                    <li class="mt-1">You can always contact our support team <a href="Contact">here</a>!</li>
+                    <li class="mt-1">You can sign into your existing account <a href="Account/Login">here</a>!</li>
+                </ul>
+            </div>
+            
+        </section>
+    </div>
+    
 </div>
+
+
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
