@@ -22,7 +22,7 @@
 <hr class="w-50 mx-auto"/>
 
 <div class="container bg-light rounded border-0 shadow-sm py-3 row d-flex justify-content-evenly align-items-center mx-auto">
-    <div class="col-lg-6">
+    <div class="col-lg-6" style="font-size: 1.1rem">
         <section class="mx-auto w-75">
             <StatusMessage Message="@Message" />
             <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
@@ -43,6 +43,10 @@
                     <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                     <label for="Input.ConfirmPassword">Confirm Password</label>
                     <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <input type="checkbox" id="newsletter" name="newsletter" value="Yes" class="darker-border-checkbox form-check-input">
+                    <label for="newsletter">Subscribe to newsletter</label><br>
                 </div>
                 <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             </EditForm>
