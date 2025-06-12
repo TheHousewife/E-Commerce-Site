@@ -30,10 +30,9 @@
                     <a href="Store" class="btn btn-secondary">Return to Store</a>
                 </div>
             </div>
-                
         </div>
     </div>
-    
+
     <div class="toast-container position-fixed start-50 top-0 py-5">
         <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
             <div class="d-flex">
@@ -44,11 +43,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="container my-5">
-        <h2 class="text-center mb-4">Featured products</h2>
+        <h2 class="text-center mb-4">Featured Products</h2>
         <div class="row g-4">
-            @foreach (var product in _products.Take(4))
+            @foreach (var product in _products)
             {
                 <div class="col-md-3">
                     <div class="card h-100 shadow-sm">
@@ -71,7 +70,6 @@
                                         </a>
                                     }
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -79,8 +77,6 @@
             }
         </div>
     </div>
-    
-    
 }
 else
 {
@@ -97,8 +93,8 @@ else
         border-radius: 10px;
         box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
     }
-    
-    .img-container{
+
+    .img-container {
         max-height: 300px;
         background-color: #FFF;
     }
@@ -114,23 +110,21 @@ else
 </style>
 
 @code {
-
-    
     [Parameter] public int Id { get; set; }
     private Product _product;
-    
     private List<Product> _products = new();
     private bool isUserLoggedIn;
     private string userId;
-    
+
     protected override async Task OnParametersSetAsync()
     {
         _product = await Context.Products.FindAsync(Id);
-        _products = await Context.Products.ToListAsync();
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
+        await UpdateProductsAsync();
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -139,8 +133,29 @@ else
         {
             userId = user.Identity.Name;
         }
+
+        _ = PeriodicallyUpdateProducts();
     }
-    
+
+    private async Task UpdateProductsAsync()
+    {
+        _products = await Context.Products
+            .OrderBy(p => Guid.NewGuid())
+            .Take(4)
+            .ToListAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task PeriodicallyUpdateProducts()
+    {
+        while (true)
+        {
+            await Task.Delay(TimeSpan.FromMinutes(1));
+            await UpdateProductsAsync();
+        }
+    }
+
     private async Task AddToCart(Product product)
     {
         if (!isUserLoggedIn) return;
@@ -148,7 +163,4 @@ else
         await CartService.AddToCartAsync(userId, product);
         await JS.InvokeVoidAsync("showCartToast");
     }
-    
-    
-    
 }
